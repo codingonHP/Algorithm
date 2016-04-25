@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nodes", "ConsoleApplication1\Nodes.csproj", "{0B53DF70-9535-4946-A1A2-41C41B9C3D41}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nodes", "Node\Nodes.csproj", "{0B53DF70-9535-4946-A1A2-41C41B9C3D41}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
