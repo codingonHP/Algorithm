@@ -158,103 +158,130 @@ namespace Algorithm_unit_test_project
         {
             var items = AddItemToNodeListAndReturn();
             bool contains = items.Contains(23);
-
             Assert.IsFalse(contains);
+
+            contains = items.Contains(-88);
+            Assert.IsTrue(contains);
+
+            contains = items.Contains(24);
+            Assert.IsTrue(contains);
+        }
+
+        [TestMethod]
+        public void CopyToLinkedListTest()
+        {
+            var list = AddItemToNodeListAndReturn();
+            var listArry = list.ToArray();
+            var len = list.Count;
+
+            var intArry = new int[len];
+
+            list.CopyTo(intArry,0);
+
+            var equals = ArrayEquals(listArry, intArry,0);
+            Assert.IsTrue(equals);
         }
 
 
         [TestMethod]
-        public void GroupBy()
+        public void CopyLinkedListToArryOfMoreSizeStartingAtZeroIndex()
         {
-            Person[] arry =
-            {
-              new Person
-              {
-                  Age = 12,
-                  Address = "patna",
-                  Name = "vishal",
-                  Salary = 1200
-              },
-              new Person
-              {
-                  Age = 25,
-                  Address = "patna",
-                  Name = "vishal",
-                  Salary = 1000
-              },new Person
-              {
-                  Age = 23,
-                  Address = "patna",
-                  Name = "anand",
-                  Salary = 500
-              },new Person
-              {
-                  Age = 6,
-                  Address = "bangalore",
-                  Name = "piku",
-                  Salary = 700
-              },new Person
-              {
-                  Age = 6,
-                  Address = "bangalore",
-                  Name = "vikhyath",
-                  Salary = 1265
-              },new Person
-              {
-                  Age = 12,
-                  Address = "patna",
-                  Name = "delta",
-                  Salary = 3400
-              },new Person
-              {
-                  Age = 12,
-                  Address = "patna",
-                  Name = "sharad",
-                  Salary = 3500
-              },new Person
-              {
-                  Age = 23,
-                  Address = "patna",
-                  Name = "alisha",
-                  Salary = 900
-              },
-            };
+            var list = AddItemToNodeListAndReturn();
+            var listArry = list.ToArray();
+            var len = list.Count;
 
-            var grpBy = arry.GroupBy(a => a.Age); //[12, 25, 23, 6]
+            var intArry = new int[len + 10];
 
-            var list = arry.GroupBy(a => a.Age, i => i.Name, (key, personNameList) =>
-            {
-                var enumerable = personNameList as string[] ?? personNameList.ToArray();
-                return enumerable;
-            }).ToList();
+            list.CopyTo(intArry, 0);
+
+            var equals = ArrayEquals(listArry, intArry,0);
+            Assert.IsTrue(equals);
+        }
 
 
-            var listOfEvenLengthNames = arry.GroupBy(a => a.Age, 
-                                                    i => new {i.Name, i.Salary }, 
-                                                    (ageKey, personList) => new
-                                                    {
-                                                        Sal = personList.Max(p => p.Salary),
-                                                        Name = personList.FirstOrDefault(p => p.Salary == personList.Max(t => t.Salary)).Name
-                                                    })
-                                            .ToList();
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void CopyLinkedListToArryOfMoreSizeStartingAtWrongIndex()
+        {
+            var list = AddItemToNodeListAndReturn();
+            var len = list.Count;
 
+            var intArry = new int[len + 10];
+
+            list.CopyTo(intArry, 11);
+            
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void CopyLinkedListToNullArray()
+        {
+            var list = AddItemToNodeListAndReturn();
+
+            int[] intArry = null;
+
+            list.CopyTo(intArry, 11);
 
         }
 
-        public class Person
+
+        [TestMethod]
+        public void CopyLinkedListToArryOfMoreSizeStartingAtXIndex()
         {
-            public int Age { get; set; }
+            var list = AddItemToNodeListAndReturn();
+            var listArry = list.ToArray();
+            var len = list.Count;
 
-            public string Name { get; set; }
+            var intArry = new int[len + 10];
 
-            public string Address { get; set; }
+            list.CopyTo(intArry, 3);
 
-            public int Salary { get; set; }
-
+            var equals = ArrayEquals(listArry, intArry, 3);
+            Assert.IsTrue(equals);
         }
 
-       
 
+
+
+        private bool ArrayEquals<T>(T[] src, T[] dest, int startAt)
+        {
+           
+            if (src.Length == dest.Length && startAt != 0)
+            {
+                return false;
+            }
+
+            if (src.Length > dest.Length)
+            {
+                return false;
+            }
+
+            if (src.Length == dest.Length && startAt == 0)
+            {
+                if (src.Where((t, i) => !t.Equals(dest[i])).Any())
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
+            if (src.Length < dest.Length)
+            {
+                int index = 0;
+                for (int i = startAt; i < src.Length; i++)
+                {
+                    if (!src[index++].Equals(dest[i]))
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            return false;
+        }
 
         private Pluralsight.Algorithm.LinkedList<int> AddItemToNodeListAndReturn()
         {

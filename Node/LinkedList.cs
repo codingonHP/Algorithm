@@ -167,6 +167,7 @@ namespace Pluralsight.Algorithm
         public void Clear()
         {
             NodeList = null;
+            Count = 0;
         }
 
         public bool Contains(T item)
